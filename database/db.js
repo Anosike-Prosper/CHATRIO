@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
+require("dotenv").config();
 
-const MONGO_URL = "mongodb://localhost:27017/note_app";
+const MONGO_URL = process.env.MONGO_URL;
 
 function connectToMongoDB() {
   mongoose.set("strictQuery", false);

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Welcome To ChatRio</title>
+  </head>
+  <body>
+
+    <div class="chat-container">
+      <header class="chat-header">
+        <h1><i class="fas fa-smile"></i> ChatRio</h1>
+  
+      </header>
+
+        <div class="chat-messages">
+          
+
+        </div>
+      </main>
+      <div class="chat-form-container">
+        <form id="chat-form">
+          <input
+            id="msg"
+            type="number"
+            placeholder="Enter Message"
+            required
+            autocomplete="off"
+          />
+          <button type="submit" id="send" class="btn"><i class="fas fa-paper-plane"></i> Send</button>
+        </form>
+      </div>
+    </div>
+   
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script type="module" src="js/main.js"></script>
+
+  </body>
+</html>
