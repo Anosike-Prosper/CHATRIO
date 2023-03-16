@@ -92,10 +92,15 @@ a {
 }
 
 .chat-messages .message {
-  padding: 10px;
+  padding: 15px;
   margin-bottom: 15px;
   background-color: var(--light-color);
   border-radius: 5px;
+  width: max-content;
+}
+
+.chat-messages .message.self {
+  margin-left: auto;
 }
 
 .chat-messages .message .meta {
@@ -108,6 +113,22 @@ a {
 
 .chat-messages .message .meta span {
   color: #777;
+}
+
+.chat-messages .message .list {
+  display: flex;
+  flex-direction: column;
+  font-size: 13px;
+}
+
+.chat-messages .message .list .list-item {
+  margin-right: 8px;
+  margin: 2px 0 2px 0;
+}
+
+.chat-messages .message .list .list-item span {
+  margin-right: 8px;
+  color: gray;
 }
 
 .chat-form-container {

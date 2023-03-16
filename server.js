@@ -4,18 +4,13 @@ const http = require("http");
 const cors = require("cors");
 require("dotenv").config();
 const { Server } = require("socket.io");
-const session = require("express-session");
+
 const { v4: uuidv4 } = require("uuid");
+
 const { connectToMongoDB } = require("./database/db");
 const orderModel = require("./models/orderModel");
-const {
-  newOrder,
-  getCurrentOrder,
-  allOrder,
-  addToOrder,
-  checkOutOrder,
-  cancelOrder,
-} = require("./services/order");
+const { connectionMiddleWare } = require("./middlewares/connect");
+const sessionMiddleware = require("./middlewares/sessionMiddleware");
 
 PORT = 3000;
 
@@ -48,15 +43,6 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/public" + "/chatbot.html");
 });
 
-const sessionMiddleware = session({
-  secret: "changeit",
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    maxAge: 1000000000,
-  },
-});
-
 // convert a connect middleware to a Socket.IO middleware
 const wrap = (middleware) => (socket, next) =>
   middleware(socket.request, {}, next);
@@ -87,84 +73,103 @@ io.use((socket, next) => {
   next();
 });
 
-io.on("connection", (socket) => {
-  const userid = socket.sessionID;
-  console.log("client connected", socket.sessionID);
-
-  socket.emit("session", { id: socket.sessionID });
-  socket.on("disconnect", () => {
-    console.log("client disconnected", socket.sessionID);
-  });
-
-  const commands = {
-    1: "Place order",
-    99: "Checkout order",
-    98: "See order history",
-    97: "See current order",
-    0: "Cancel order",
-  };
-
-  // ............
-  // const service = new Service();
-  const items = [
-    { id: 2, name: "cassava", price: 200 },
-    { id: 3, name: "Garri", price: 500 },
-    { id: 4, name: "Ewa", price: 100 },
-    { id: 5, name: "Titus", price: 30 },
-  ];
-
-  socket.emit("user_options", commands);
-
-  socket.on("user-response", async (msg) => {
-    console.log(msg);
-    switch (Number.parseInt(msg)) {
-      case 1:
-        const order = await newOrder(userid);
-        console.log("---------the order is", order);
-
-        if (!order) {
-          socket.send("There is an order present."); // i dont get this
-        } else {
-          socket.emit("order-list", items);
-        }
-        break;
-
-      case 97:
-        const current = await getCurrentOrder(userid);
-        socket.emit("current-order", current);
-        break;
-
-      case 98:
-        const orderHistory = await allOrder(userid);
-        socket.emit("order-history", orderHistory);
-        break;
-
-      case 99:
-        const _checkOutOrder = await checkOutOrder(userid);
-        if (!_checkOutOrder) socket.send("There is no order to checkout.");
-        else socket.send("Successfully checked out your order");
-        break;
-
-      case 0:
-        const _cancelOrder = await cancelOrder(userid);
-        if (!_cancelOrder) socket.send("There is no order to cancel.");
-        else socket.send("Successfully cancelled your order");
-        break;
-
-      default: {
-        const item = items.find((item) => item.id == msg);
-        console.log(item);
-        await addToOrder({ item, userid });
-        // socket.send(`Successfully added ${item.name} to your order.`);
-        // socket.emit("order-list", items);
-        // socket.emit("user_options", commands);
-      }
-    }
-  });
-});
+io.on("connection", connectionMiddleWare);
 
 connectToMongoDB();
 
 server.listen(process.env.PORT, () => {
   console.log("listening on ", process.env.PORT);
 });
+
+// {
+//   const userid = socket.sessionID;
+//   console.log("client connected", socket.sessionID);
+
+//   socket.emit("session", { id: socket.sessionID });
+//   socket.on("disconnect", () => {
+//     console.log("client disconnected", socket.sessionID);
+//   });
+
+//   const commands = {
+//     1: "Place order",
+//     99: "Checkout order",
+//     98: "See order history",
+//     97: "See current order",
+//     0: "Cancel order",
+//   };
+
+//   // ............
+//   // const service = new Service();
+//   const items = [
+//     { id: 2, name: "cassava", price: 200 },
+//     { id: 3, name: "Garri", price: 500 },
+//     { id: 4, name: "Ewa", price: 100 },
+//     { id: 5, name: "Titus", price: 30 },
+//   ];
+
+//   socket.emit("user_options", commands);
+
+//   let pause = false;
+//   socket.on("user-response", async (msg) => {
+//     console.log(msg);
+//     try {
+//       switch (Number.parseInt(msg)) {
+//         case 1:
+//           const order = await newOrder(userid);
+//           // console.log("---------the order is", order);
+//           pause = true;
+
+//           if (!order) {
+//             socket.send("There is an order present."); // i dont get this
+//           } else {
+//             socket.emit("order-list", items);
+//           }
+//           break;
+
+//         case 97:
+//           const current = await getCurrentOrder(userid);
+//           console.log("--------------", current);
+//           if (!current) {
+//             socket.send("There is no current order.");
+//           }
+//           socket.emit("current-order", current);
+//           break;
+
+//         case 98:
+//           const orderHistory = await allOrder(userid);
+//           if (!orderHistory || orderHistory.length == 0)
+//             socket.send("There is no history.");
+//           else socket.emit("order-history", orderHistory);
+//           break;
+
+//         case 99:
+//           await checkOutOrder(userid);
+//           pause = false;
+//           socket.send("Successfully checked out your order");
+//           break;
+
+//         case 0:
+//           await cancelOrder(userid);
+//           pause = false;
+//           socket.send("Successfully cancelled your order");
+//           break;
+
+//         default: {
+//           const item = items.find((item) => item.id == msg);
+//           if (!pause) {
+//             socket.send("invalid command");
+//             return;
+//           }
+
+//           console.log(item);
+//           await addToOrder({ item, userid });
+//           socket.send(`Successfully added ${item.name} to your order.`);
+//           socket.emit("order-list", items);
+//           socket.emit("user_options", commands);
+//         }
+//       }
+//     } catch (err) {
+//       socket.send(err.message);
+//     }
+//   });
+// }
