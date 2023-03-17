@@ -9,7 +9,7 @@ function connect() {
     div.classList.add("message");
     div.innerHTML = `
       <div>
-        <div class="meta">here are the possible commands you can do...</div>
+        <div class="meta">Here are the possible commands you can do...</div>
         <div class="list">
           ${Object.entries(msg)
             .map(
@@ -131,6 +131,7 @@ function connect() {
                   .map((item) => `<div>${item.itemname} - ${item.price}</div>`)
                   .join("\n")}
               </div>
+              <div>Total: ${order.amount}</div>
             </div>`
             )
             .join("\n")}

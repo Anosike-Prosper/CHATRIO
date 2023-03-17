@@ -53,7 +53,7 @@ const connectionMiddleWare = (socket) => {
 
         case 97:
           const current = await getCurrentOrder(userid);
-          console.log("--------------", current);
+          // console.log("--------------", current);
           if (!current) {
             socket.send("There is no current order.");
           }
@@ -88,7 +88,7 @@ const connectionMiddleWare = (socket) => {
             return;
           }
 
-          console.log(item);
+          // console.log(item);
           await addToOrder({ item, userid });
           socket.send(`Successfully added ${item.name} to your order.`);
           socket.emit("order-list", items);
