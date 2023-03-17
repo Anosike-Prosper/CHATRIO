@@ -12,7 +12,7 @@ const orderModel = require("./models/orderModel");
 const { connectionMiddleWare } = require("./middlewares/connect");
 const sessionMiddleware = require("./middlewares/sessionMiddleware");
 
-PORT = process.env.PORT || 3030;
+PORT = process.env.PORT;
 
 class InMemorySessionStore {
   constructor() {
@@ -80,4 +80,3 @@ connectToMongoDB();
 server.listen(process.env.PORT, () => {
   console.log("listening on ", process.env.PORT);
 });
-

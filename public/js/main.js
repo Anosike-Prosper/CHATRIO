@@ -1,5 +1,5 @@
 function connect() {
-  const socket = io("ws://localhost:5005", {
+  const socket = io(`ws://${window.location.host}`, {
     auth: { sessionID: localStorage.getItem("id") },
   });
 
