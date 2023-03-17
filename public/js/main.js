@@ -1,10 +1,5 @@
 function connect() {
-  let address = `ws://localhost:5005`;
-  if (process.env.ENV === "production") {
-    address = `wss://${window.location.host}`;
-  }
-
-  const socket = io(address, {
+  const socket = io(`wss://${window.location.host}`, {
     auth: { sessionID: localStorage.getItem("id") },
   });
 
