@@ -101,7 +101,7 @@ const checkOutOrder = async (userid) => {
 
     const { _id } = currentOrder;
     return orderModel.findByIdAndUpdate(_id, { status: "completed" });
-  } catch (error) {
+  } catch (err) {
     if (err.custom) throw new CustomError(err.message);
     throw new Error("Some error occured while checking out order");
   }
