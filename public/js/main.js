@@ -96,14 +96,19 @@ function connect() {
     const div = document.createElement("div");
     div.classList.add("message");
     div.innerHTML = `
-      <div>
+      <div class="orders">
         Current Order:
-        <div>
-          ${order.items.map(
-            (item) => `<div>${item.itemname} - ${item.price}</div>`
-          )}
+        <div class="order-item">
+          ${
+            order.items.length === 0
+              ? `<div>There are currently no items in this order.</div>`
+              : order.items.map(
+                  (item) =>
+                    `<div class="details">${item.itemname} - ${item.price}</div>`
+                )
+          }
         </div>
-        <div>
+        <div class="total">
           Total: ${order.amount}
         </div>
       </div>
@@ -117,21 +122,24 @@ function connect() {
     const div = document.createElement("div");
     div.classList.add("message");
     div.innerHTML = `
-      <div>
+      <div class="orders">
         Order History
 
-        <div>
+        <div class="order-items">
           ${msgs
             .map(
               (order) =>
-                `<div>
+                `<div classname="order-item">
               Order #${order._id}
-              <div>
+              <div class="">
                 ${order.items
-                  .map((item) => `<div>${item.itemname} - ${item.price}</div>`)
-                  .join("\n")}
+                  .map(
+                    (item) =>
+                      `<div class="details">${item.itemname} - ${item.price}</div>`
+                  )
+                  .join("")}
               </div>
-              <div>Total: ${order.amount}</div>
+              <div class="total">Total: ${order.amount}</div>
             </div>`
             )
             .join("\n")}
@@ -144,7 +152,7 @@ function connect() {
 
   function scrollToView() {
     const messageBox = document.getElementsByClassName("chat-messages")[0];
-    messageBox.scrollTo(0, messageBox.getBoundingClientRect().height);
+    messageBox.scrollTo(0, messageBox.getClientRects()[0]["bottom"]);
   }
 
   document.getElementById("chat-form").addEventListener("submit", (e) => {

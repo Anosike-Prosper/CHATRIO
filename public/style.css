@@ -121,6 +121,28 @@ a {
   font-size: 13px;
 }
 
+.order-items {
+  display: flex;
+  flex-direction: column;
+  margin: 10px 0 5px 0;
+}
+
+.order-items .order-item {
+  margin: 3px 0 8px 0;
+}
+
+.order-item .details {
+  font-size: 14px;
+}
+
+.total {
+  margin-top: 3px;
+  font-size: 15px;
+  border-top: 1px solid black;
+  padding: 2px;
+  max-width: max-content;
+}
+
 .chat-messages .message .list .list-item {
   margin-right: 8px;
   margin: 2px 0 2px 0;
