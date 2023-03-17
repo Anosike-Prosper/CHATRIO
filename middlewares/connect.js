@@ -37,7 +37,6 @@ const connectionMiddleWare = (socket) => {
 
   let pause = false;
   socket.on("user-response", async (msg) => {
-    console.log(msg);
     try {
       switch (Number.parseInt(msg)) {
         case 1:

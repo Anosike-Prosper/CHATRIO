@@ -7,11 +7,7 @@ const orderSchema = new Schema(
       type: String,
       required: [true, "Provide user ID!"],
     },
-    // id: {
-    //   type: mongoose.Types.ObjectId,
 
-    //   required: [true, "Please provide the ID of the item!"],
-    // },
     status: {
       type: String,
       enum: ["completed", "pending", "cancelled"],

@@ -1,11 +1,11 @@
 const orderItemModel = require("../models/orderItemModel");
 const orderModel = require("../models/orderModel");
+const CustomError = require("../utils/error");
 
 const newOrder = async (userid) => {
   try {
-    const current = await orderModel.findOne({ userid, status: "pending" }); // why this?
+    const current = await orderModel.findOne({ userid, status: "pending" });
 
-    // console.log("the current is", current);
     if (current !== null) throw new CustomError("There is a current order");
 
     const data = await orderModel.create({ userid });
@@ -19,14 +19,11 @@ const newOrder = async (userid) => {
 const getCurrentOrder = async (userid) => {
   try {
     const order = await orderModel.findOne({ userid, status: "pending" });
-    console.log("---------------here is the order", order);
 
-    // .populate("orderitems");
     if (!order) throw new CustomError("No current order");
 
     const orderItems = await orderItemModel.find({ orderid: order._id });
-    console.log("---------here is the order item", orderItems);
-    // console.log(...order.toObject());
+
     return {
       ...order.toObject(),
       items: [...orderItems.map((e) => e.toObject())],
@@ -40,7 +37,6 @@ const getCurrentOrder = async (userid) => {
 const addToOrder = async ({ item, userid }) => {
   try {
     const currentOrder = await getCurrentOrder(userid);
-    console.log("---------- here is the current order", currentOrder);
 
     const { _id } = currentOrder;
     await orderItemModel.create({
@@ -75,11 +71,10 @@ const cancelOrder = async (userid) => {
 const allOrder = async (userid) => {
   try {
     const orders = await orderModel.find({ userid });
-    console.log("-------------1", orders);
+
     if (!orders) return [];
 
     const _orders = orders.map((e) => e.toObject());
-    console.log("-------------2", _orders);
 
     const final = [];
 
@@ -111,13 +106,6 @@ const checkOutOrder = async (userid) => {
     throw new Error("Some error occured while checking out order");
   }
 };
-
-class CustomError extends Error {
-  constructor(message) {
-    super(message);
-    this.custom = true;
-  }
-}
 
 module.exports = {
   newOrder,
