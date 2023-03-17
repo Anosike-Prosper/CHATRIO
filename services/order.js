@@ -70,7 +70,10 @@ const cancelOrder = async (userid) => {
 
 const allOrder = async (userid) => {
   try {
-    const orders = await orderModel.find({ userid });
+    const orders = await orderModel.find({
+      userid,
+      status: { $ne: "pending" },
+    });
 
     if (!orders) return [];
 
