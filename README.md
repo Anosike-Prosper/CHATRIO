@@ -91,7 +91,7 @@ To be able to get this application up and running, ensure to have node installed
 
 ---
 
-## Setup
+4. #### Setup
 
 ---
 
@@ -100,7 +100,7 @@ To install all packages, use `npm install`
 - run: `npm run start` (for production)
 - run: `npm run dev` (for development)
 
----
+5.  **At this point, your server should be up and running at** http://localhost:5005
 
 ### Base Url
 
