@@ -10,15 +10,20 @@ Hot Sauce Restuarant Chatbot is a chatbot application that assists customers in 
 
 ---
 
-<ul>
- <li>Select 1 to Place an order</li>
- <li>To place your order, enter the number preceding the items you want to order in comma-separated values, e.g 2,3,4,5.</li>
-<li> Select 99 to checkout order</li>
-<li>Select 98 to see order history</li>
-<li> Select 97 to see current order</li>
-<li>Select 0 to cancel order</li>
+- Select 1 to Place an order.
+- To place your order, enter the number preceding the items you want to order. For example:
+  - Select 2 for Pizza
+  - Select 3 for Rice
+  - Select 4 for Chicken
+  - Select 5 for Salad
+- Select 99 to checkout order.
+- Select 98 to see order history.
+- Select 97 to see current order.
+- Select 0 to cancel order.
 
-</ul>
+```
+NOTE: Multiple items can be ordered
+```
 
 ---
 
